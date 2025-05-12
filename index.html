@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ukino.exe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ukino.exe</h1>
+  <div id="game"></div>
+
+  <script>
+    const story = {
+      start: {
+        text: "Un grincement... Une odeur de sang... Un murmure.\nTu es Lina. Tu te réveilles dans une pièce sombre.",
+        choices: [
+          { text: "Regarder autour de toi", next: "regarder" },
+          { text: "Appeler à l'aide", next: "appeler" }
+        ]
+      },
+      regarder: {
+        text: "Tu distingues une porte entrouverte et un miroir brisé. Que fais-tu ?",
+        choices: [
+          { text: "Regarder dans le miroir", next: "miroir" },
+          { text: "Sortir par la porte", next: "porte" }
+        ]
+      },
+      appeler: {
+        text: "Une voix lointaine te répond : 'Lina ? C’est toi ? Viens… vite…'.",
+        choices: [
+          { text: "Suivre la voix", next: "voix" },
+          { text: "Rester dans la pièce", next: "rester" }
+        ]
+      },
+      miroir: {
+        text: "Ton reflet te regarde... mais ne bouge pas comme toi. Il sourit. Une voix dit : 'Tu ne peux pas fuir ce que tu es.'",
+        choices: [
+          { text: "Casser le miroir", next: "casser" },
+          { text: "Fuir le miroir", next: "porte" }
+        ]
+      },
+      casser: {
+        text: "Du sang coule du miroir. Quelqu’un hurle derrière toi.",
+        choices: [
+          { text: "Se retourner", next: "docteur" },
+          { text: "Fuir sans regarder", next: "couloir" }
+        ]
+      },
+      porte: {
+        text: "Tu sors dans un couloir sombre. Une silhouette t’attend au bout...",
+        choices: [
+          { text: "Avancer", next: "silhouette" },
+          { text: "Retourner en arrière", next: "miroir" }
+        ]
+      },
+      rester: {
+        text: "La pièce se referme. La lumière s’éteint. Quelqu’un est là avec toi. Trop tard...",
+        choices: []
+      },
+      voix: {
+        text: "Tu trouves Élise, une fille perdue ici depuis longtemps. Elle murmure : 'Le docteur arrive... choisis bien.'",
+        choices: [
+          { text: "Lui faire confiance", next: "elise" },
+          { text: "L’ignorer et continuer", next: "couloir" }
+        ]
+      },
+      elise: {
+        text: "Elle te conduit à un escalier caché. 'Tu peux encore fuir...' dit-elle.",
+        choices: [
+          { text: "Descendre l’escalier", next: "escape" },
+          { text: "Changer d’avis", next: "couloir" }
+        ]
+      },
+      silhouette: {
+        text: "La silhouette s’approche. C’est le Docteur Marron.",
+        choices: [
+          { text: "Lui parler", next: "docteur" },
+          { text: "Courir", next: "couloir" }
+        ]
+      },
+      docteur: {
+        text: "'Tu m’appartiens, Lina.' dit-il. Un hurlement retentit.",
+        choices: [
+          { text: "Résister", next: "fin_bonne" },
+          { text: "Abandonner", next: "fin_mauvaise" }
+        ]
+      },
+      couloir: {
+        text: "Tu cours à travers les couloirs sans fin. Ils changent à chaque tournant...",
+        choices: [
+          { text: "Entrer dans une salle au hasard", next: "random_room" },
+          { text: "S’asseoir et abandonner", next: "fin_mauvaise" }
+        ]
+      },
+      random_room: {
+        text: "Une porte s’ouvre sur une lumière. Une sortie ?",
+        choices: [
+          { text: "Entrer", next: "fin_bonne" },
+          { text: "Ignorer", next: "fin_mauvaise" }
+        ]
+      },
+      escape: {
+        text: "Tu sors dans la nuit. L’air frais. Libre. Pour l’instant...",
+        choices: []
+      },
+      fin_bonne: {
+        text: "Tu as survécu... mais les murmures résonnent encore. Tu n'es peut-être pas sortie.",
+        choices: []
+      },
+      fin_mauvaise: {
+        text: "Tout devient noir. Tu es à lui, pour toujours.",
+        choices: []
+      }
+    };
+
+    function showScene(sceneKey) {
+      const scene = story[sceneKey];
+      const gameDiv = document.getElementById("game");
+      gameDiv.innerHTML = "<pre>" + scene.text + "</pre>";
+
+      scene.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.text;
+        btn.onclick = () => showScene(choice.next);
+        gameDiv.appendChild(btn);
+        gameDiv.appendChild(document.createElement("br"));
+      });
+    }
+
+    showScene("start");
+  </script>
+</body>
+</html>
