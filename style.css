@@ -1,4 +1,3 @@
-
 body {
   background-color: black;
   color: white;
@@ -11,11 +10,46 @@ body {
   overflow: hidden;
   flex-direction: column;
   text-align: center;
+  animation: fadeIn 1s ease-in-out;
 }
 
-#game {
-  max-width: 800px;
+#game, #menu, #instructions {
+  max-width: 1000px;
+  width: 100%;
   animation: idle 1s infinite;
+}
+
+h1 {
+  font-size: 3.5em;
+  color: red;
+  text-shadow: 0 0 20px red, 0 0 30px darkred;
+  animation: pulse 2s infinite;
+}
+
+button {
+  background: #111;
+  color: white;
+  border: 1px solid white;
+  padding: 0.8em 1.8em;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #333;
+  color: lightgray;
+}
+
+.choice {
+  margin: 1em 0;
+}
+
+ul {
+  text-align: left;
+  font-size: 1.2em;
+  color: lightgray;
 }
 
 @keyframes idle {
@@ -32,18 +66,10 @@ body {
   100% { transform: translate(0, 0); }
 }
 
-.choice {
-  margin: 1em 0;
+/* Effet de tremblement de l'écran */
+.shake {
+  animation: shake 0.5s;
+  animation-timing-function: ease-in-out;
 }
-button {
-  background: #111;
-  color: white;
-  border: 1px solid white;
-  padding: 0.5em 1.2em;
-  font-size: 1em;
-  cursor: pointer;
-  margin-top: 10px;
-}
-button:hover {
-  background: #333;
-}
+
+@keyframes shake {

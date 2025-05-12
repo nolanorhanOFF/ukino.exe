@@ -1,134 +1,101 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ukino.exe</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>ukino.exe</h1>
-  <div id="game"></div>
+  <div id="menu">
+    <h1>ukino.exe</h1>
+    <p>Bienvenue dans "Les Murmures de l’Abîme"</p>
+    <p><strong>Instructions :</strong></p>
+    <ul>
+      <li>Écoutez attentivement les dialogues et prenez vos décisions.</li>
+      <li>Faites des choix qui influencent l'histoire.</li>
+      <li>Les effets visuels et sonores rendront l'expérience plus immersive.</li>
+      <li>Les moments les plus effrayants arrivent sans prévenir.</li>
+    </ul>
+    <button onclick="startGame()">Commencer</button>
+    <button onclick="showInstructions()">Voir les instructions</button>
+    <button onclick="exitGame()">Quitter</button>
+  </div>
+
+  <div id="game" style="display: none;"></div>
+  <div id="instructions" style="display: none;">
+    <h2>Instructions</h2>
+    <p>1. Lisez attentivement les dialogues et faites des choix.</p>
+    <p>2. Le jeu se développe en fonction de vos décisions.</p>
+    <p>3. Certains événements peuvent provoquer des effets de "flipper". Préparez-vous !</p>
+    <button onclick="startGame()">Commencer</button>
+    <button onclick="exitGame()">Quitter</button>
+  </div>
 
   <script>
-    const story = {
-      start: {
-        text: "Un grincement... Une odeur de sang... Un murmure.\nTu es Lina. Tu te réveilles dans une pièce sombre.",
-        choices: [
-          { text: "Regarder autour de toi", next: "regarder" },
-          { text: "Appeler à l'aide", next: "appeler" }
-        ]
-      },
-      regarder: {
-        text: "Tu distingues une porte entrouverte et un miroir brisé. Que fais-tu ?",
-        choices: [
-          { text: "Regarder dans le miroir", next: "miroir" },
-          { text: "Sortir par la porte", next: "porte" }
-        ]
-      },
-      appeler: {
-        text: "Une voix lointaine te répond : 'Lina ? C’est toi ? Viens… vite…'.",
-        choices: [
-          { text: "Suivre la voix", next: "voix" },
-          { text: "Rester dans la pièce", next: "rester" }
-        ]
-      },
-      miroir: {
-        text: "Ton reflet te regarde... mais ne bouge pas comme toi. Il sourit. Une voix dit : 'Tu ne peux pas fuir ce que tu es.'",
-        choices: [
-          { text: "Casser le miroir", next: "casser" },
-          { text: "Fuir le miroir", next: "porte" }
-        ]
-      },
-      casser: {
-        text: "Du sang coule du miroir. Quelqu’un hurle derrière toi.",
-        choices: [
-          { text: "Se retourner", next: "docteur" },
-          { text: "Fuir sans regarder", next: "couloir" }
-        ]
-      },
-      porte: {
-        text: "Tu sors dans un couloir sombre. Une silhouette t’attend au bout...",
-        choices: [
-          { text: "Avancer", next: "silhouette" },
-          { text: "Retourner en arrière", next: "miroir" }
-        ]
-      },
-      rester: {
-        text: "La pièce se referme. La lumière s’éteint. Quelqu’un est là avec toi. Trop tard...",
-        choices: []
-      },
-      voix: {
-        text: "Tu trouves Élise, une fille perdue ici depuis longtemps. Elle murmure : 'Le docteur arrive... choisis bien.'",
-        choices: [
-          { text: "Lui faire confiance", next: "elise" },
-          { text: "L’ignorer et continuer", next: "couloir" }
-        ]
-      },
-      elise: {
-        text: "Elle te conduit à un escalier caché. 'Tu peux encore fuir...' dit-elle.",
-        choices: [
-          { text: "Descendre l’escalier", next: "escape" },
-          { text: "Changer d’avis", next: "couloir" }
-        ]
-      },
-      silhouette: {
-        text: "La silhouette s’approche. C’est le Docteur Marron.",
-        choices: [
-          { text: "Lui parler", next: "docteur" },
-          { text: "Courir", next: "couloir" }
-        ]
-      },
-      docteur: {
-        text: "'Tu m’appartiens, Lina.' dit-il. Un hurlement retentit.",
-        choices: [
-          { text: "Résister", next: "fin_bonne" },
-          { text: "Abandonner", next: "fin_mauvaise" }
-        ]
-      },
-      couloir: {
-        text: "Tu cours à travers les couloirs sans fin. Ils changent à chaque tournant...",
-        choices: [
-          { text: "Entrer dans une salle au hasard", next: "random_room" },
-          { text: "S’asseoir et abandonner", next: "fin_mauvaise" }
-        ]
-      },
-      random_room: {
-        text: "Une porte s’ouvre sur une lumière. Une sortie ?",
-        choices: [
-          { text: "Entrer", next: "fin_bonne" },
-          { text: "Ignorer", next: "fin_mauvaise" }
-        ]
-      },
-      escape: {
-        text: "Tu sors dans la nuit. L’air frais. Libre. Pour l’instant...",
-        choices: []
-      },
-      fin_bonne: {
-        text: "Tu as survécu... mais les murmures résonnent encore. Tu n'es peut-être pas sortie.",
-        choices: []
-      },
-      fin_mauvaise: {
-        text: "Tout devient noir. Tu es à lui, pour toujours.",
-        choices: []
-      }
-    };
+    const gameData = [
+      { text: "Vous vous réveillez dans une pièce sombre. Une voix murmure votre nom... 'Ukino...'.", choices: [{ text: "Qui est là ?", next: 1 }, { text: "Rester silencieux", next: 2 }] },
+      { text: "La voix ricane. 'Tu ne te souviens pas ? Tu m’as appelé... et maintenant tu dois jouer.'", choices: [{ text: "Fuir", next: 3 }, { text: "Demander plus", next: 4 }] },
+      { text: "Le silence devient oppressant. Quelque chose approche... lentement.", choices: [{ text: "Se lever", next: 4 }, { text: "Rester couché", next: 5 }] },
+      { text: "Vous courez vers la porte, mais elle est verrouillée. La voix : 'On ne quitte pas si facilement l’abîme.'", choices: [{ text: "Hurler", next: 6 }, { text: "Chercher une clé", next: 7 }] },
+      { text: "La voix devient plus claire. 'Tu as été choisi pour connaître la vérité.'", choices: [{ text: "Quelle vérité ?", next: 7 }, { text: "Je ne veux rien savoir", next: 6 }] },
+      { text: "Quelque chose vous tire dans l'obscurité. Vous tombez dans un gouffre sans fin.", choices: [] },
+      { text: "Le monde autour de vous commence à se fissurer. Vous vous réveillez en criant.", choices: [] },
+      { text: "Une clé rouillée se trouve sous le lit. Vous la saisissez, une chance de survivre ?", choices: [{ text: "Essayer sur la porte", next: 6 }] },
+      { text: "Un bruit sourd se fait entendre. Quelqu'un... ou quelque chose... entre dans la pièce.", choices: [{ text: "Se cacher sous le lit", next: 8 }, { text: "Faire face à ce qui arrive", next: 9 }] },
+      { text: "Un éclair illumine la pièce. Une silhouette immense se dessine dans l'ombre.", choices: [{ text: "Crier", next: 10 }, { text: "Courir", next: 11 }] },
+      { text: "Vous vous sentez observé. La pièce devient de plus en plus petite. L'air devient lourd.", choices: [{ text: "Vérifier la fenêtre", next: 12 }, { text: "Rester immobile", next: 13 }] },
+      { text: "Une porte se matérialise soudainement. Vous devez faire un choix rapide.", choices: [{ text: "Entrer dans la porte", next: 14 }, { text: "Fuir la porte", next: 15 }] },
+      { text: "Vous êtes dans une forêt sombre. Les arbres semblent se refermer sur vous.", choices: [{ text: "Avancer", next: 16 }, { text: "Reculer", next: 17 }] },
+      { text: "Un souffle glacé vous effleure. Vous n'êtes plus seul.", choices: [{ text: "Appeler à l'aide", next: 18 }, { text: "Continuer à avancer", next: 19 }] },
+      { text: "Le sol se dérobe sous vos pieds. Vous tombez dans un abîme profond.", choices: [] },
+      { text: "Des bruits de pas résonnent derrière vous. Vous sentez une présence malveillante.", choices: [{ text: "Regarder derrière", next: 20 }, { text: "Accélérer le pas", next: 21 }] },
+      { text: "Vous arrivez devant une porte en bois vieille et abîmée. Le vent la frappe violemment.", choices: [{ text: "Ouvrir la porte", next: 22 }, { text: "Laisser la porte fermée", next: 23 }] },
+      { text: "Une main glacée saisit votre épaule. Vous tournez lentement.", choices: [{ text: "Se libérer", next: 24 }, { text: "Rester immobile", next: 25 }] },
+      { text: "Un cri perçant résonne dans la pièce. Quelqu'un vous observe.", choices: [{ text: "Regarder autour", next: 26 }, { text: "Ignorer le cri", next: 27 }] },
+      { text: "Tout se fige autour de vous. Le temps semble s'être arrêté.", choices: [{ text: "Crier", next: 28 }, { text: "Regarder fixement", next: 29 }] },
+      { text: "Un grincement métallique se fait entendre. Vous tournez la tête.", choices: [{ text: "Regarder", next: 30 }, { text: "Fuir", next: 31 }] },
+      { text: "Vous sentez un froid glacial envahir la pièce. Une ombre se dessine dans le coin.", choices: [{ text: "Écouter", next: 32 }, { text: "Fuir immédiatement", next: 33 }] },
+      { text: "La pièce se met à tourner. Des murmures envahissent vos oreilles. Que faites-vous ?", choices: [{ text: "Ignorer les murmures", next: 34 }, { text: "Répondre aux murmures", next: 35 }] },
+      { text: "Une lumière aveuglante éclaire tout autour de vous. Vous avez l'impression de perdre pied.", choices: [{ text: "Fuir", next: 36 }, { text: "Chercher d'où vient la lumière", next: 37 }] },
+      { text: "La température baisse soudainement, vous frissonnez. Une porte secrète apparaît.", choices: [{ text: "Entrer dans la porte", next: 38 }, { text: "Laisser la porte secrète fermée", next: 39 }] }
+    ];
 
-    function showScene(sceneKey) {
-      const scene = story[sceneKey];
-      const gameDiv = document.getElementById("game");
-      gameDiv.innerHTML = "<pre>" + scene.text + "</pre>";
-
-      scene.choices.forEach(choice => {
-        const btn = document.createElement("button");
-        btn.textContent = choice.text;
-        btn.onclick = () => showScene(choice.next);
-        gameDiv.appendChild(btn);
-        gameDiv.appendChild(document.createElement("br"));
-      });
+    function startGame() {
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("instructions").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      showScene(0);
     }
 
-    showScene("start");
+    function showInstructions() {
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("instructions").style.display = "block";
+    }
+
+    function exitGame() {
+      window.close();
+    }
+
+    function showScene(index) {
+      const scene = gameData[index];
+      const game = document.getElementById("game");
+      let html = `<p>${scene.text}</p>`;
+      if (scene.choices.length === 0) {
+        html += `<p><strong>Fin du jeu.</strong></p><button onclick="location.reload()">Recommencer</button>`;
+      } else {
+        scene.choices.forEach(choice => {
+          html += `<div class="choice"><button onclick="showScene(${choice.next})">${choice.text}</button></div>`;
+        });
+      }
+      game.innerHTML = html;
+
+      // Effet de tremblement de l'écran pour effrayer
+      if (Math.random() > 0.8) {
+        document.body.classList.add('shake');
+        setTimeout(() => document.body.classList.remove('shake'), 500);
+      }
+    }
   </script>
 </body>
 </html>
